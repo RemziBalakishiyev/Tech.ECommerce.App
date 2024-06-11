@@ -20,7 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Tech.Core\Tech.Core.csproj" />
     <ProjectReference Include="..\Tech.Entity\Tech.Entity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="EntityFrameworks\Configurations\Accounts\" />
   </ItemGroup>
 
 </Project>
