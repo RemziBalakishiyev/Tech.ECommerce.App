@@ -2,6 +2,7 @@
 
 namespace Tech.DataAccess.Abstract.Products;
 
-public interface IProductRepository:IGenericRepository<Product>
+public interface IProductRepository : IGenericRepository<Product>
 {
+    Task<IEnumerable<Product>> GetProducts();
 }

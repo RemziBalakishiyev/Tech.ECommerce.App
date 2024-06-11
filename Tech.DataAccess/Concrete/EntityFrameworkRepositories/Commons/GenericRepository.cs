@@ -11,14 +11,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
 {
     private readonly TechContext _dbContext;
 
-    DbSet<T> Table => _dbContext.Set<T>();
+    public DbSet<T> TableEntity => _dbContext.Set<T>();
     public GenericRepository(TechContext dbContext)
     {
         _dbContext = dbContext;
     }
     public async Task<bool> AddAsync(T entity)
     {
-        var addedState = await Table.AddAsync(entity);
+        var addedState = await TableEntity.AddAsync(entity);
         return addedState.State == EntityState.Added;
     }
 
@@ -26,26 +26,26 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
     {
         if (tracking is false)
         {
-            return await Table.AsNoTracking().ToListAsync();
+            return await TableEntity.AsNoTracking().ToListAsync();
         }
-        return await Table.ToListAsync();
+        return await TableEntity.ToListAsync();
     }
 
-    public async Task<T> GetByIdAsync(int id) => await Table.FindAsync(id);
+    public async Task<T> GetByIdAsync(int id) => await TableEntity.FindAsync(id);
 
     public async Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> expression)
-        => await Table.Where(expression).ToListAsync();
+        => await TableEntity.Where(expression).ToListAsync();
 
     public bool Remove(T entity)
     {
-        var removed = Table.Remove(entity);
+        var removed = TableEntity.Remove(entity);
         return removed.State == EntityState.Deleted;
     }
 
     public bool Update(T entity)
     {
-        var updated = Table.Update(entity);
-        return updated.State == EntityState.Modified;
+        _dbContext.Entry(entity).State = EntityState.Modified;
+        return true;
     }
 
     public async Task SaveChangesAsync()
